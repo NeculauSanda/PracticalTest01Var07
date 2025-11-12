@@ -17,6 +17,10 @@ class PracticalTest01Var07MainActivity : AppCompatActivity() {
     private lateinit var random: Button
     private lateinit var set: Button
 
+    var res: Int? = null
+    var resp: Int? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_practical_test01_var07_main)
@@ -78,24 +82,6 @@ class PracticalTest01Var07MainActivity : AppCompatActivity() {
 
     }
 
-    fun intentToString(intent: Intent?): String? {
-        if (intent == null) {
-            return null
-        }
-        var out = intent.toString()
-        val extras = intent.getExtras()
-        if (extras != null) {
-            extras.size()
-            out += "\n"
-        }
-        if (intent.getAction() != null) out += "\nAction = " + intent.getAction()
-        if (intent.getType() != null) out += "\nType = " + intent.getType()
-        if (intent.getData() != null) out += "\nData = " + intent.getData()
-        if (intent.getPackage() != null) out += "\nPackage = " + intent.getPackage()
-        if (intent.getDataString() != null) out += "\nDataString = " + intent.getDataString()
-        return out
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1) {
@@ -103,13 +89,30 @@ class PracticalTest01Var07MainActivity : AppCompatActivity() {
 //
 //            Log.d("RES", "INTENT = " + intentToString(intent) )
 //            val sum = intent.getIntExtra("sum", 0);
+
+            res = resultCode
             Toast.makeText(this, "Returned with result: $resultCode", Toast.LENGTH_LONG).show()
         } else {
 //            val intent = getIntent()
 //            val prod = intent.getIntExtra("prod", 0);
-
+            resp = resultCode
             Toast.makeText(this, "Returned with result: $resultCode", Toast.LENGTH_LONG).show()
 
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("saveprod", resp.toString())
+        outState.putString("savesum", res.toString())
+    }
+
+    // === B.2.c ===
+    // Metodă opțională (dacă vrei să restaurezi explicit și aici)
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        Log.d("SAVE", savedInstanceState.getString("saveprod", "0"))
+        Log.d("Sum", savedInstanceState.getString("savesum", "0"))
+
     }
 }
